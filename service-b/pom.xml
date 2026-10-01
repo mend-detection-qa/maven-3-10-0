@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+    Explicit relativePath — Maven 3.10.0 strict relativePath
+    validation compliance.
+  -->
+  <parent>
+    <groupId>com.example.probe</groupId>
+    <artifactId>maven-310-strict-resolver</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>service-b</artifactId>
+  <packaging>jar</packaging>
+  <name>service-b</name>
+  <description>
+    Depends on service-a (inter-module) and commons-compress:1.26.0.
+    commons-compress:1.26.0 transitively pulls commons-lang3 as
+    well — this is the second path in the diamond. The resolved
+    version is still 3.14.0 because the root dependencyManagement
+    pin takes precedence (nearest-wins from root).
+  </description>
+
+  <dependencies>
+
+    <!--
+      Inter-module dependency on service-a (local artifact).
+      This brings in service-a's direct deps (commons-collections4,
+      commons-text) and commons-lang3 transitively.
+    -->
+    <dependency>
+      <groupId>com.example.probe</groupId>
+      <artifactId>service-a</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!--
+      Direct dep: commons-compress:1.26.0
+      commons-compress 1.26.0 has no direct commons-lang3 dep in
+      its own POM, so no second transitive path for commons-lang3
+      from this side. The diamond is solely through service-a's
+      two paths (commons-text -> commons-lang3 and the
+      dependencyManagement pin).
+    -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <!-- version inherited from parent dependencyManagement -->
+    </dependency>
+
+  </dependencies>
+
+</project>
