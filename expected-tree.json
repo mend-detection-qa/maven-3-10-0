@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-10-01T00:00:00+00:00",
+  "packages": {
+    "commons-collections4": {
+      "dependencies": [],
+      "source": "registry",
+      "source_detail": {
+        "groupId": "org.apache.commons",
+        "type": "jar"
+      },
+      "version": "4.4"
+    },
+    "commons-compress": {
+      "dependencies": [],
+      "source": "registry",
+      "source_detail": {
+        "groupId": "org.apache.commons",
+        "type": "jar"
+      },
+      "version": "1.26.0"
+    },
+    "commons-lang3": {
+      "dependencies": [],
+      "source": "registry",
+      "source_detail": {
+        "diamond_note": "Resolved by nearest-wins + Maven Resolver 2.0.21 constraint intersection. Root dependencyManagement pin at 3.14.0 wins over commons-text transitive declaration.",
+        "groupId": "org.apache.commons",
+        "type": "jar"
+      },
+      "version": "3.14.0"
+    },
+    "commons-text": {
+      "dependencies": [
+        "commons-lang3"
+      ],
+      "source": "registry",
+      "source_detail": {
+        "groupId": "org.apache.commons",
+        "type": "jar"
+      },
+      "version": "1.11.0"
+    },
+    "service-a": {
+      "dependencies": [
+        "commons-collections4",
+        "commons-text"
+      ],
+      "source": "local",
+      "source_detail": {
+        "groupId": "com.example.probe",
+        "module_note": "Inter-module dependency within the maven-310-strict-resolver reactor. Not a registry artifact.",
+        "relativePath": "service-a",
+        "type": "jar"
+      },
+      "version": "1.0.0"
+    },
+    "service-b": {
+      "dependencies": [
+        "service-a",
+        "commons-compress"
+      ],
+      "source": "local",
+      "source_detail": {
+        "groupId": "com.example.probe",
+        "module_note": "Inter-module dependency within the maven-310-strict-resolver reactor. Not a registry artifact.",
+        "relativePath": "service-b",
+        "type": "jar"
+      },
+      "version": "1.0.0"
+    }
+  },
+  "pm": "maven",
+  "pm_version_tested": "3.10.0",
+  "pm_version_under_test": "3.10.0",
+  "root": {
+    "dependencies": [
+      "service-a",
+      "service-b"
+    ],
+    "name": "maven-310-strict-resolver",
+    "version": "1.0.0"
+  },
+  "schema_version": "1.2",
+  "source_file": "maven-310-strict-resolver-20261001-000000/pom.xml",
+  "warnings": [
+    "Root is a POM-packaging aggregator (no direct external deps). Modules service-a and service-b are listed as direct children in root.dependencies to represent the reactor structure.",
+    "service-a and service-b are inter-module local artifacts; their source is 'local', not 'registry'. Mend may report them with source 'local' or omit them — see Mend failure modes in README.",
+    "commons-lang3:3.14.0 is the diamond-dependency vertex. A single entry must appear in packages — duplicate entries (one per diamond path) indicate a Mend detection bug.",
+    "This probe targets Maven 3.10.0 strict POM validation and explicit relativePath. Probes scanned under Maven < 3.10.0 may produce different trees due to relaxed validation and resolver 2.0.x differences."
+  ]
+}
