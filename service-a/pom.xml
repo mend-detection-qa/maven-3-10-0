@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+    Explicit relativePath — required for Maven 3.10.0 strict
+    relativePath validation. Default (../pom.xml) is now flagged
+    when the file does not resolve; explicit path is best practice.
+  -->
+  <parent>
+    <groupId>com.example.probe</groupId>
+    <artifactId>maven-310-strict-resolver</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>service-a</artifactId>
+  <packaging>jar</packaging>
+  <name>service-a</name>
+  <description>
+    Declares commons-collections4 and commons-text as direct
+    dependencies. commons-text 1.11.0 transitively depends on
+    commons-lang3 (>= 3.14.0). commons-collections4 4.4 has no
+    direct commons-lang3 dep. The diamond vertex commons-lang3 is
+    pinned to 3.14.0 by the parent dependencyManagement.
+  </description>
+
+  <dependencies>
+
+    <!--
+      Direct dep 1: commons-collections4:4.4
+      Transitives: none that intersect the diamond.
+    -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <!-- version inherited from parent dependencyManagement -->
+    </dependency>
+
+    <!--
+      Direct dep 2: commons-text:1.11.0
+      Transitives: commons-lang3 (declared as [3.14,) in
+      commons-text's own POM — resolved to 3.14.0 by nearest-wins
+      + dependencyManagement pin at root).
+    -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <!-- version inherited from parent dependencyManagement -->
+    </dependency>
+
+  </dependencies>
+
+</project>
