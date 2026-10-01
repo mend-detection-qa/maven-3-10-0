@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example.probe</groupId>
+  <artifactId>maven-310-strict-resolver</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+
+  <name>maven-310-strict-resolver</name>
+  <description>
+    Probe for Maven 3.10.0 strict POM validation, explicit
+    relativePath in child parent blocks, and conflict resolution
+    under Maven Resolver 2.0.21 (diamond dependency on
+    commons-lang3 resolved by nearest-wins + dependencyManagement).
+  </description>
+
+  <modules>
+    <module>service-a</module>
+    <module>service-b</module>
+  </modules>
+
+  <!--
+    dependencyManagement pins commons-lang3 to 3.14.0.
+    Both service-a's transitive pull of commons-lang3 (via
+    commons-text:1.11.0) and any indirect pull via
+    commons-collections4 are governed by this pin.
+    This is the diamond-vertex pin under Maven Resolver 2.0.21
+    constraint intersection: nearest-wins wins at 3.14.0.
+  -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.14.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>1.11.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>4.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-compress</artifactId>
+        <version>1.26.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+</project>
